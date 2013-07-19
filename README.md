@@ -51,7 +51,7 @@ message: ahoy dave
 
 ### Example
 
-```javascript
+```html
 <script type="text/javascript" src="regexemitter.js"></script>
 <script type="text/javascript">
 
