@@ -7,7 +7,8 @@ var events = new EventEmitter();
 // register a new event
 events.on( /send this message to (john|dave)/, function ( arg1, arg2 ){
 
-  console.log( 'new message', arg1, arg2 );
+  console.log( 'event: ' + this.event );
+  console.log( 'message:', arg1, arg2 );
 
 });
 

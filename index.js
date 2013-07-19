@@ -69,7 +69,7 @@ EventEmitter.prototype.emit = function(){
   this._events.forEach( function( event, k ){
     if( event && key.match( event.regex ) ){
       if( 'function' === typeof event.cb ){
-        event.cb.apply( null, args );
+        event.cb.apply( { event: key }, args );
         if( event.once ) delete _self._events[ k ];
       }
     }
