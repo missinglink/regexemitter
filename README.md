@@ -49,7 +49,7 @@ message: ahoy dave
 
 ## For the browser
 
-Copy the `index.js` file to your web server and name it `regexemitter.js`.
+Copy `index.js` to your web server and name it `regexemitter.js`.
 
 ### Example
 
