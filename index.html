@@ -35,6 +35,9 @@
 
 <p>An event emitter which takes regular expressions for event names</p>
 
+<h2>
+<a name="for-nodejs" class="anchor" href="#for-nodejs"><span class="octicon octicon-link"></span></a>For nodejs</h2>
+
 <h3>
 <a name="install" class="anchor" href="#install"><span class="octicon octicon-link"></span></a>Install</h3>
 
@@ -44,7 +47,7 @@
 <p><a href="https://nodei.co/npm/regexemitter/"><img src="https://nodei.co/npm/regexemitter.png?downloads=true&amp;stars=true" alt="NPM"></a></p>
 
 <h3>
-<a name="example-script" class="anchor" href="#example-script"><span class="octicon octicon-link"></span></a>Example Script</h3>
+<a name="example" class="anchor" href="#example"><span class="octicon octicon-link"></span></a>Example</h3>
 
 <div class="highlight"><pre><span class="cm">/**</span>
 <span class="cm">  regexeventemitter behaves just like nodejs native emitter except it</span>
@@ -69,6 +72,49 @@
 
 <h3>
 <a name="output" class="anchor" href="#output"><span class="octicon octicon-link"></span></a>Output</h3>
+
+<div class="highlight"><pre>event: send this message to john
+message: hello john
+
+event: send this message to dave
+message: ahoy dave
+</pre></div>
+
+<h2>
+<a name="for-the-browser" class="anchor" href="#for-the-browser"><span class="octicon octicon-link"></span></a>For the browser</h2>
+
+<p>Copy <code>index.js</code> to your web server and rename it <code>regexemitter.js</code>.</p>
+
+<h3>
+<a name="example-1" class="anchor" href="#example-1"><span class="octicon octicon-link"></span></a>Example</h3>
+
+<div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"regexemitter.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span>
+
+  <span class="cm">/**</span>
+<span class="cm">    regexeventemitter behaves just like nodejs native emitter except it</span>
+<span class="cm">    allows regular expressions as event names.</span>
+<span class="cm">  **/</span>
+
+  <span class="kd">var</span> <span class="nx">events</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">EventEmitter</span><span class="p">();</span>
+
+  <span class="c1">// register a new event</span>
+  <span class="nx">events</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span> <span class="sr">/send this message to (john|dave)/</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">arg1</span><span class="p">,</span> <span class="nx">arg2</span> <span class="p">){</span>
+
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s1">'event:'</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">event</span> <span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s1">'message:'</span><span class="p">,</span> <span class="nx">arg1</span><span class="p">,</span> <span class="nx">arg2</span> <span class="p">);</span>
+
+  <span class="p">});</span>
+
+  <span class="nx">events</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span> <span class="s1">'send this message to john'</span><span class="p">,</span> <span class="s1">'hello'</span><span class="p">,</span> <span class="s1">'john'</span> <span class="p">);</span>
+  <span class="nx">events</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span> <span class="s1">'send this message to andy'</span><span class="p">,</span> <span class="s1">'hi'</span><span class="p">,</span> <span class="s1">'andy'</span> <span class="p">);</span>
+  <span class="nx">events</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span> <span class="s1">'send this message to dave'</span><span class="p">,</span> <span class="s1">'ahoy'</span><span class="p">,</span> <span class="s1">'dave'</span> <span class="p">);</span>
+
+<span class="nt">&lt;/script&gt;</span>
+</pre></div>
+
+<h3>
+<a name="output-1" class="anchor" href="#output-1"><span class="octicon octicon-link"></span></a>Output</h3>
 
 <div class="highlight"><pre>event: send this message to john
 message: hello john
