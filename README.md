@@ -14,7 +14,10 @@ npm install regexemitter --save
 ### Example Script
 
 ```javascript
-/** regexeventemitter behaves just like nodejs native emitter except it takes regular expressions **/
+/**
+  regexeventemitter behaves just like nodejs native emitter except it
+  allows regular expressions as event names.
+**/
 
 var EventEmitter = require('regexemitter');
 var events = new EventEmitter();
