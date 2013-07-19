@@ -76,4 +76,19 @@ EventEmitter.prototype.emit = function(){
   });
 };
 
-module.exports = EventEmitter;
+// Export for nodejs
+if ( typeof module !== 'undefined' && typeof module.exports !== 'undefined ') {
+  module.exports = EventEmitter;
+}
+else {
+  // Export for AMD
+  if ( typeof define === 'function' && define.amd ) {
+    define([], function() {
+      return EventEmitter;
+    });
+  }
+  // Export to browser
+  else {
+    window.EventEmitter = EventEmitter;
+  }
+}
