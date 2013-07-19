@@ -43,7 +43,6 @@ message: hello john
 
 event: send this message to dave
 message: ahoy dave
-
 ```
 
 ## Build Status
