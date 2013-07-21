@@ -24,7 +24,7 @@ describe 'EventEmitter', ->
       it 'should have an empty array for storing events', ->
 
         emitter = new EventEmitter()
-        emitter.should.have.property('_events').and.eql null
+        emitter.should.have.property('_events').and.eql []
 
       it 'should have a reasonable default value for max listeners', ->
 
@@ -447,7 +447,8 @@ describe 'EventEmitter', ->
       it 'should return empty _events object for new emitters', ->
 
         emitter = new EventEmitter()
-        should.equal emitter.listeners(), emitter._events
+        should.exist emitter._events
+        emitter._events.should.eql emitter.listeners()
 
       it 'should return the contents of _events', ->
 

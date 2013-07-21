@@ -3,7 +3,7 @@
 
 function EventEmitter() {
   this.domain = null;
-  this._events = null;
+  this._events = [];
   this._maxListeners = 10;
 }
 
@@ -26,7 +26,6 @@ EventEmitter.prototype.on = function (name, listener) {
   if ( 'function' !== typeof listener ) {
     throw new Error( 'on only takes instances of Function' );
   }
-  if( !Array.isArray( this._events ) ){ this._events = []; }
   this._events.push({
     name: name,
     listener: listener
@@ -44,7 +43,6 @@ EventEmitter.prototype.once = function (name, listener) {
   if ( 'function' !== typeof listener ) {
     throw new Error( 'once only takes instances of Function' );
   }
-  if( !Array.isArray( this._events ) ){ this._events = []; }
   this._events.push({
     name: name,
     listener: listener,
@@ -114,7 +112,7 @@ EventEmitter.prototype.match = function (match) {
 
 EventEmitter.prototype.emit = function ( key, arg1, arg2 ) {
   if ('string' !== typeof key) { throw new Error('invalid string'); }
-  if( !Array.isArray( this._events ) ){ return; }
+  if( !this._events.length ){ return; }
 
   // performance hack - Array.slice is expensive
   var args = [ arg1, arg2 ];
