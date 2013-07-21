@@ -106,8 +106,8 @@ describe 'EventEmitter', ->
         emitter = new EventEmitter()
 
         (-> emitter.on( 'test', func ) ).should.not.throw()
-        emitter._events[0].should.have.property('regex').and.eql 'test'
-        emitter._events[0].should.have.property('cb').and.be.instanceof Function
+        emitter._events[0].should.have.property('name').and.eql 'test'
+        emitter._events[0].should.have.property('listener').and.be.instanceof Function
 
         [ null, undefined, 0, 1, 1.1, [], {} ].forEach ( listener ) ->
           (-> emitter.on( 'test', listener ) ).should.throw 'on only takes instances of Function'
@@ -116,8 +116,8 @@ describe 'EventEmitter', ->
 
         emitter = new EventEmitter()
         emitter.on( 'test', func )
-        emitter._events[0].should.have.property('regex').and.eql 'test'
-        emitter._events[0].should.have.property('cb')
+        emitter._events[0].should.have.property('name').and.eql 'test'
+        emitter._events[0].should.have.property('listener')
         emitter._events.length.should.eql 1
 
       it 'should not set the once flag for an event', ->
@@ -198,8 +198,8 @@ describe 'EventEmitter', ->
         emitter = new EventEmitter()
 
         (-> emitter.once( 'test', func ) ).should.not.throw()
-        emitter._events[0].should.have.property('regex').and.eql 'test'
-        emitter._events[0].should.have.property('cb').and.be.instanceof Function
+        emitter._events[0].should.have.property('name').and.eql 'test'
+        emitter._events[0].should.have.property('listener').and.be.instanceof Function
 
         [ null, undefined, 0, 1, 1.1, [], {} ].forEach ( listener ) ->
           (-> emitter.once( 'test', listener ) ).should.throw 'once only takes instances of Function'
@@ -208,8 +208,8 @@ describe 'EventEmitter', ->
 
         emitter = new EventEmitter()
         emitter.once( 'test', func )
-        emitter._events[0].should.have.property('regex').and.eql 'test'
-        emitter._events[0].should.have.property('cb')
+        emitter._events[0].should.have.property('name').and.eql 'test'
+        emitter._events[0].should.have.property('listener')
         emitter._events.length.should.eql 1
 
       it 'should set the once flag for an event', ->
