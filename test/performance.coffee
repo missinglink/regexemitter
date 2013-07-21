@@ -69,38 +69,46 @@ describe 'performance benchmarks', ->
     log 'instantiation', iterations, regexemitter: regexemitter, nodejs: nodejs
     regexemitter.should.be.within (nodejs||1)*-10, (nodejs||1)*10
 
-  it 'should compare listenerCount - no listeners bound', ->
+  if !process.version.match /0\.10\./
 
-    iterations = iterate.heavy
+    it 'should not have EventEmitter.listenerCount() in the events module for this version of node', ->
 
-    test = ( Class, emitter ) -> Class.listenerCount( emitter ).should.eql 0
+      events.EventEmitter.should.not.have.property('listenerCount')
 
-    regexemitter = benchmark( ( -> test EventEmitter, new EventEmitter() ), iterations )
-    nodejs = benchmark( ( -> test events.EventEmitter, new events.EventEmitter() ), iterations )
+  else
 
-    log 'listenerCount - no listeners bound', iterations, regexemitter: regexemitter, nodejs: nodejs
-    regexemitter.should.be.within (nodejs||1)*-10, (nodejs||1)*10
+    it 'should compare listenerCount - no listeners bound', ->
 
-  it 'should compare listenerCount - many listeners bound', ->
+      iterations = iterate.heavy
 
-    iterations = iterate.few * 2
+      test = ( Class, emitter ) -> Class.listenerCount( emitter ).should.eql 0
 
-    test = ( Class, emitter ) -> Class.listenerCount( emitter, 'event-1-' ).should.eql 1
-    setup = ( emitter ) ->
-      emitter.removeAllListeners()
-      emitter.setMaxListeners iterations
-      countValidEvents( emitter ).should.eql 0
-      emitter.on( 'event-'+i+'-', func ) for i in [iterations...0] by -1
-      countValidEvents( emitter ).should.eql iterations
+      regexemitter = benchmark( ( -> test EventEmitter, new EventEmitter() ), iterations )
+      nodejs = benchmark( ( -> test events.EventEmitter, new events.EventEmitter() ), iterations )
 
-    emitter = new EventEmitter()
-    regexemitter = benchmark( ( -> test( EventEmitter, emitter ) ), iterations, ( -> setup emitter ) )
+      log 'listenerCount - no listeners bound', iterations, regexemitter: regexemitter, nodejs: nodejs
+      regexemitter.should.be.within (nodejs||1)*-10, (nodejs||1)*10
 
-    emitter = new events.EventEmitter()
-    nodejs = benchmark( ( -> test( events.EventEmitter, emitter ) ), iterations, ( -> setup emitter ) )
+    it 'should compare listenerCount - many listeners bound', ->
 
-    log 'listenerCount - many listeners bound', iterations, regexemitter: regexemitter, nodejs: nodejs
-    regexemitter.should.be.within (nodejs||1)*-10, (nodejs||1)*10
+      iterations = iterate.few * 2
+
+      test = ( Class, emitter ) -> Class.listenerCount( emitter, 'event-1-' ).should.eql 1
+      setup = ( emitter ) ->
+        emitter.removeAllListeners()
+        emitter.setMaxListeners iterations
+        countValidEvents( emitter ).should.eql 0
+        emitter.on( 'event-'+i+'-', func ) for i in [iterations...0] by -1
+        countValidEvents( emitter ).should.eql iterations
+
+      emitter = new EventEmitter()
+      regexemitter = benchmark( ( -> test( EventEmitter, emitter ) ), iterations, ( -> setup emitter ) )
+
+      emitter = new events.EventEmitter()
+      nodejs = benchmark( ( -> test( events.EventEmitter, emitter ) ), iterations, ( -> setup emitter ) )
+
+      log 'listenerCount - many listeners bound', iterations, regexemitter: regexemitter, nodejs: nodejs
+      regexemitter.should.be.within (nodejs||1)*-10, (nodejs||1)*10
 
   it 'should compare setMaxListeners', ->
 
