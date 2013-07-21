@@ -142,7 +142,7 @@ describe 'performance benchmarks', ->
     results['nodejs'] = benchmark( ( -> test emitter ), 1, -> setup emitter )
 
     log 'emitting string events - many listeners bound x'+iterations, results
-    results.regexemitter.should.be.within (results.nodejs||1)*-100, (results.nodejs||1)*100
+    results.regexemitter.should.be.within (results.nodejs||1)*-300, (results.nodejs||1)*300
 
   it 'should compare removing all listeners', ->
 
