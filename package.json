@@ -2,7 +2,7 @@
   "name": "regexemitter",
   "preferGlobal": false,
   "private": false,
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "a regex eventemitter wirtten in javascript",
   "contributors": [],
   "scripts": {
