@@ -123,10 +123,10 @@ EventEmitter.prototype.emit = function ( key ) {
     if (event && key.match(event.regex)) {
       if ('function' === typeof event.cb) {
         event.cb.apply({ event: key }, args);
-        if (event.once) {
-          _self.emit( 'removeListener', _self._events[i].regex, _self._events[i].cb );
-          delete _self._events[i];
-        }
+      }
+      if (event.once) {
+        _self.emit( 'removeListener', _self._events[i].regex, _self._events[i].cb );
+        delete _self._events[i];
       }
     }
   }
