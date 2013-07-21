@@ -131,7 +131,7 @@ EventEmitter.prototype.emit = function ( key, arg1, arg2 ) {
         event.cb.apply({ event: key }, args);
       }
       if (event.once) {
-        _self.emit( 'removeListener', _self._events[i].regex, _self._events[i].cb );
+        _self.emit( 'removeListener', event.regex, event.cb );
         delete _self._events[i];
       }
     }
