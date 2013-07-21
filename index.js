@@ -113,8 +113,8 @@ EventEmitter.prototype.match = function (match) {
 };
 
 EventEmitter.prototype.emit = function ( key, arg1, arg2 ) {
-  if( !Array.isArray( this._events ) ){ return; }
   if ('string' !== typeof key) { throw new Error('invalid string'); }
+  if( !Array.isArray( this._events ) ){ return; }
 
   // performance hack - Array.slice is expensive
   var args = [ arg1, arg2 ];
