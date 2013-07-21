@@ -24,7 +24,7 @@ describe 'performance benchmarks', ->
     else text = '+' + ( perc-100 ) + '%'
     
     stats['diff'] = text
-    line = ' ' + title + ' x' + iterations + ' '
+    line = '    ' + title + ' x' + iterations + ' '
     line += ' ' while line.length < 58
     line += JSON.stringify( stats )
       .replace(/:"?([^"}]+)/g,': $1\t')
@@ -37,7 +37,7 @@ describe 'performance benchmarks', ->
 
   after ->
     console.log()
-    console.log( ' ==== benchmark results ====' )
+    console.log( '  benchmark results' )
     console.log( output )
 
   func = (arg) -> return arg
