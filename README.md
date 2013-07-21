@@ -1,9 +1,9 @@
 
 # Regex event emitter
 
-An event emitter which takes regular expressions for event names
+An event emitter which takes regular expressions & strings for event names.
 
-## For nodejs
+Well tested and available in vanilla javascript for the browser or server.
 
 ### Install
 
