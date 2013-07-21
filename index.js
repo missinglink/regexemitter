@@ -102,10 +102,10 @@ EventEmitter.prototype.match = function (match) {
   return false;
 };
 
-EventEmitter.prototype.emit = function () {
-  var args = Array.prototype.slice.call(arguments, 0);
-  var key = args.shift(); // shift key off args
+EventEmitter.prototype.emit = function ( key ) {
   if ('string' !== typeof key) { throw new Error('invalid string'); }
+  var args = Array.prototype.slice.call(arguments, 0);
+  args.shift(); // shift key off args
   var _self = this, i = 0, len;
   if( !Array.isArray( this._events ) ){ return; }
   for (len = this._events.length; i < len; i++) {
