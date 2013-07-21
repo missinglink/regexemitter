@@ -4,62 +4,41 @@ should = require 'should'
 
 describe 'functional tests', ->
 
-  it 'functional #1', (done) ->
+  it 'should work as per the readme example', (done) ->
 
-    emitter = new EventEmitter()
     called = 0
+    events = new EventEmitter()
+    events.on /send this message to (john|dave)/, ( arg1, arg2 ) ->
 
-    testvalues = ( arg, arg2 ) ->
+      [ 'send this message to john', 'send this message to dave' ]
+        .should.include this.event
 
-      called++
-      arg.should.eql 'bingo'
-      arg2.should.eql 'bongo'
+      [ 'hello john', 'ahoy dave' ]
+        .should.include arg1 + ' ' + arg2
 
-      EventEmitter.listenerCount( emitter ).should.eql 1
-      EventEmitter.listenerCount( emitter, /hello (world|universe)/ ).should.eql 1
-      EventEmitter.listenerCount( emitter, /bango/ ).should.eql 0
+      if ++called > 1 then done()
 
-      if called > 2 then throw new Error 'event called too many times'
-      if called == 2
-        setTimeout ->
-          emitter.removeListener( /hello (world|universe)/ )
-          EventEmitter.listenerCount( emitter ).should.eql 0
-          EventEmitter.listenerCount( emitter, /hello (world|universe)/ ).should.eql 0
-          EventEmitter.listenerCount( emitter, /bango/ ).should.eql 0
-          done()
-        , 10
+    events.emit( 'send this message to john', 'hello', 'john' );
+    events.emit( 'send this message to andy', 'hi', 'andy' );
+    events.emit( 'send this message to dave', 'ahoy', 'dave' );
 
-    emitter.on /hello (world|universe)/, testvalues
-    emitter.emit 'hello testcase', 'bingo', 'bongo'
-    emitter.emit 'hello world', 'bingo', 'bongo'
-    emitter.emit 'hello universe', 'bingo', 'bongo'
+  it 'should only fire once when the listener is removed during the first callback', (done) ->
 
-  it 'functional #2', (done) ->
-
-    emitter = new EventEmitter()
     called = 0
+    emitter = new EventEmitter()
 
-    testvalues = ( arg, arg2 ) ->
+    test = ->
 
-      called++
-      arg.should.eql 'bingo'
-      arg2.should.eql 'bongo'
+      # remove listener after first invocation
+      if ++called is 1
+        EventEmitter.listenerCount( emitter ).should.eql 1 # listener still registered
+        emitter.removeListener( /hello (world|universe)/ )
+        EventEmitter.listenerCount( emitter ).should.eql 0 # listener removed successfully
+      
+      # mocha will complain if done is called more than once
+      done()
 
-      EventEmitter.listenerCount( emitter ).should.eql 1
-      EventEmitter.listenerCount( emitter, /hello (world|universe)/ ).should.eql 1
-      EventEmitter.listenerCount( emitter, /bango/ ).should.eql 0
-
-      if called > 1 then throw new Error 'event called too many times'
-      if called == 1
-        setTimeout ->
-          emitter.removeListener( /hello (world|universe)/ )
-          EventEmitter.listenerCount( emitter ).should.eql 0
-          EventEmitter.listenerCount( emitter, /hello (world|universe)/ ).should.eql 0
-          EventEmitter.listenerCount( emitter, /bango/ ).should.eql 0
-          done()
-        , 10
-
-    emitter.once /hello (world|universe)/, testvalues
+    emitter.once /hello (world|universe)/, test
     emitter.emit 'hello testcase', 'bingo', 'bongo'
     emitter.emit 'hello world', 'bingo', 'bongo'
     emitter.emit 'hello universe', 'bingo', 'bongo'
