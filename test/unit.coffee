@@ -1,5 +1,6 @@
 
 EventEmitter = require '../index'
+# EventEmitter = require('events').EventEmitter
 should = require 'should'
 events = require 'events'
 
@@ -23,19 +24,17 @@ describe 'EventEmitter', ->
       it 'should have an empty array for storing events', ->
 
         emitter = new EventEmitter()
-        emitter.should.have.property '_events'
-        emitter._events.should.eql []
+        emitter.should.have.property('_events').and.eql null
+
+      it 'should have a reasonable default value for max listeners', ->
+
+        emitter = new EventEmitter()
+        emitter.should.have.property('_maxListeners').and.eql 10
 
       it 'should have a null domain property', ->
 
         emitter = new EventEmitter()
         emitter.should.have.property('domain').and.eql null
-
-      it 'should have a reasonable default value for max listeners', ->
-
-        emitter = new EventEmitter()
-        emitter.should.have.property '_maxListeners'
-        emitter._maxListeners.should.eql 10
 
   describe 'public interface', ->
 
@@ -62,7 +61,7 @@ describe 'EventEmitter', ->
       it 'should return the length of _events for a given emitter', ->
 
         emitter = new EventEmitter()
-        emitter._events.push 'test'
+        emitter.on( 'test', -> null )
 
         emitter._events.length = 1
         EventEmitter.listeners( emitter ).should.eql 1
@@ -70,9 +69,9 @@ describe 'EventEmitter', ->
       it 'should return the length of matching events when listener is supplied', ->
 
         emitter = new EventEmitter()
-        emitter._events.push { regex: 'test1' }
-        emitter._events.push { regex: 'test1' }
-        emitter._events.push { regex: 'test2' }
+        emitter.on( 'test1', -> null )
+        emitter.on( 'test1', -> null )
+        emitter.on( 'test2', -> null )
 
         EventEmitter.listeners( emitter ).should.eql 3
         EventEmitter.listeners( emitter, 'test1' ).should.eql 2
@@ -239,16 +238,28 @@ describe 'EventEmitter', ->
 
     # ---------------------------------------------------------------------------------------
 
+    it 'should have a prototype method - addListener()', ->
+
+      EventEmitter.prototype.should.have.property('addListener').and.be.instanceof Function
+
+    describe 'EventEmitter.prototype.addListener( event, listener )', ->
+
+      it 'should be an alias of on()', ->
+
+        EventEmitter.prototype.addListener.should.equal EventEmitter.prototype.on
+
+    # ---------------------------------------------------------------------------------------
+
     it 'should have a prototype method - removeListener()', ->
 
       EventEmitter.prototype.should.have.property('removeListener').and.be.instanceof Function
 
     describe 'EventEmitter.prototype.removeListener( event )', ->
 
-      it 'should accept 1 argument', ->
+      it 'should accept 2 arguments', ->
 
         emitter = new EventEmitter()
-        emitter.removeListener.length.should.eql 1
+        emitter.removeListener.length.should.eql 2
 
       it 'should validate event name is string or regex', ->
 
@@ -370,7 +381,7 @@ describe 'EventEmitter', ->
       it 'should return empty _events object for new emitters', ->
 
         emitter = new EventEmitter()
-        emitter.listeners().should.eql emitter._events
+        should.equal emitter.listeners(), emitter._events
 
       it 'should return the contents of _events', ->
 
@@ -381,9 +392,9 @@ describe 'EventEmitter', ->
       it 'should return only the events equal to supplied listener', ->
 
         emitter = new EventEmitter()
-        emitter._events.push { regex: 'test1' }
-        emitter._events.push { regex: 'test1' }
-        emitter._events.push { regex: 'test2' }
+        emitter.on( 'test1', -> null )
+        emitter.on( 'test1', -> null )
+        emitter.on( 'test2', -> null )
 
         emitter.listeners().should.eql emitter._events
         Object.keys( emitter.listeners( 'test1' ) ).length.should.eql 2
@@ -462,19 +473,14 @@ describe 'EventEmitter', ->
 
   # ---------------------------------------------------------------------------------------
 
-  describe.skip 'nodejs native EventEmitter compatibility', ->
+  describe 'nodejs native EventEmitter compatibility', ->
 
     emitter = regex: new EventEmitter(), nodejs: new events.EventEmitter()
-
-    it 'should have the same static methods', -> null
 
     it 'should have the same prototype methods', ->
 
       for method in Object.keys( events.EventEmitter.prototype )
         EventEmitter.prototype.should.have.property(method).and.be.instanceof Function
-
-        console.log( method, EventEmitter.prototype[method].length, events.EventEmitter.prototype[method].length )
-
         EventEmitter.prototype[method].length.should.eql events.EventEmitter.prototype[method].length
 
     it 'should have the same properties & default values', ->
@@ -489,14 +495,14 @@ describe 'EventEmitter', ->
         emitter = new EventEmitter()
         emitter.should.have.property('_events').and.eql null
 
-       it 'should set _events to object on first insert', ->
+       it.skip 'should set _events to object on first insert', ->
 
         emitter = new EventEmitter()
         emitter.should.have.property('_events').and.eql null
         emitter.on( 'test', -> null )
         emitter.should.have.property('_events').and.eql { test: -> null }
 
-       it 'should set _events key to array on second insert', ->
+       it.skip 'should set _events key to array on second insert', ->
 
         emitter = new EventEmitter()
         emitter.should.have.property('_events').and.eql null
@@ -504,4 +510,6 @@ describe 'EventEmitter', ->
         emitter.on( 'test', -> null )
         emitter.should.have.property('_events').and.eql { test: [ ( -> null ), ( -> null ) ] }
 
-    it 'should store once events in the same way (once wrapper)', -> null
+      it.skip 'should store once events in the same way (once wrapper)', ->
+
+        should.exist null
