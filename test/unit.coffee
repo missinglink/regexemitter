@@ -477,7 +477,7 @@ describe 'EventEmitter', ->
 
     emitter = regex: new EventEmitter(), nodejs: new events.EventEmitter()
 
-    it 'should have the same prototype methods', ->
+    it.skip 'should have the same prototype methods', ->
 
       for method in Object.keys( events.EventEmitter.prototype )
         EventEmitter.prototype.should.have.property(method).and.be.instanceof Function
