@@ -91,4 +91,8 @@ message: ahoy dave
 
 ## Build Status
 
+```bash
+npm test
+```
+
 [![Build Status](https://travis-ci.org/missinglink/regexemitter.png?branch=master)](https://travis-ci.org/missinglink/regexemitter)
