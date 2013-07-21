@@ -1,11 +1,11 @@
 
-# Regex event emitter
+# regex event emitter
 
 An event emitter which takes regular expressions & strings for event names.
 
 Well tested and available in vanilla javascript for the browser or server.
 
-### Install
+### install
 
 ```bash
 npm install regexemitter --save
@@ -13,7 +13,7 @@ npm install regexemitter --save
 
 [![NPM](https://nodei.co/npm/regexemitter.png?downloads=true&stars=true)](https://nodei.co/npm/regexemitter/)
 
-### Example
+### example
 
 ```javascript
 /**
@@ -37,7 +37,7 @@ events.emit( 'send this message to andy', 'hi', 'andy' );
 events.emit( 'send this message to dave', 'ahoy', 'dave' );
 ```
 
-### Output
+### output
 
 ```bash
 event: send this message to john
@@ -47,11 +47,11 @@ event: send this message to dave
 message: ahoy dave
 ```
 
-## For the browser
+## for the browser
 
 Copy `index.js` to your web server and rename it `regexemitter.js`.
 
-### Example
+### example
 
 ```html
 <script type="text/javascript" src="regexemitter.js"></script>
@@ -79,7 +79,7 @@ Copy `index.js` to your web server and rename it `regexemitter.js`.
 </script>
 ```
 
-### Output
+### output
 
 ```bash
 event: send this message to john
@@ -89,7 +89,7 @@ event: send this message to dave
 message: ahoy dave
 ```
 
-## Build Status
+## build status
 
 ```bash
 npm test
