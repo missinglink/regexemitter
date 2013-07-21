@@ -112,12 +112,18 @@ EventEmitter.prototype.match = function (match) {
   return false;
 };
 
-EventEmitter.prototype.emit = function ( key ) {
-  if ('string' !== typeof key) { throw new Error('invalid string'); }
-  var args = Array.prototype.slice.call(arguments, 0);
-  args.shift(); // shift key off args
-  var _self = this, i = 0, len;
+EventEmitter.prototype.emit = function ( key, arg1, arg2 ) {
   if( !Array.isArray( this._events ) ){ return; }
+  if ('string' !== typeof key) { throw new Error('invalid string'); }
+
+  // performance hack - Array.slice is expensive
+  var args = [ arg1, arg2 ];
+  if( arguments.length > 3 ){
+    args = Array.prototype.slice.call(arguments, 0);
+    args.shift(); // shift key off args
+  }
+
+  var _self = this, i = 0, len;
   for (len = this._events.length; i < len; i++) {
     var event = _self._events[i];
     if (event && key.match(event.regex)) {
