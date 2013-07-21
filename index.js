@@ -7,7 +7,7 @@ function EventEmitter() {
   this._maxListeners = 10;
 }
 
-EventEmitter.listeners = function (emitter, listener) {
+EventEmitter.listenerCount = function (emitter, listener) {
   if (!emitter) { return -1; }
   if (!Array.isArray( emitter._events )) { return 0; }
   if (!listener) { return emitter._events.length; }
@@ -31,6 +31,7 @@ EventEmitter.prototype.on = function (name, listener) {
     regex: name,
     cb: listener
   });
+  this.emit( 'newListener', name, listener );
 };
 
 EventEmitter.prototype.once = function (name, listener) {
@@ -49,6 +50,7 @@ EventEmitter.prototype.once = function (name, listener) {
     cb: listener,
     once: true
   });
+  this.emit( 'newListener', name, listener );
 };
 
 EventEmitter.prototype.addListener = EventEmitter.prototype.on;
@@ -59,19 +61,27 @@ EventEmitter.prototype.removeListener = function (name, listener) {
     return this.emit('error', 'invalid event name');
   }
   if( !Array.isArray( this._events ) ){ return; }
+  var _self = this;
   this._events = this._events.filter(function (event) {
-    return (String(event.regex) !== String(name));
+    if (String(event.regex) === String(name)) {
+      _self.emit( 'removeListener', event.regex, event.cb );
+      return false;
+    }
+    return true;
   });
 };
 
-EventEmitter.prototype.removeAllListeners = function (regex) {
-  if (arguments.length && !( regex instanceof RegExp || 'string' === typeof regex )) {
+EventEmitter.prototype.removeAllListeners = function (name) {
+  if (arguments.length && !( name instanceof RegExp || 'string' === typeof name )) {
     return this.emit('error', 'invalid event name');
   }
   if( !Array.isArray( this._events ) ){ return; }
+  var _self = this;
   this._events = this._events.filter(function (event) {
-    if (!regex) { return false; }
-    if (String(event.regex) === String(regex)) { return false; }
+    if (!name || String(event.regex) === String(name)) {
+      _self.emit( 'removeListener', event.regex, event.cb );
+      return false;
+    }
     return true;
   });
 };
@@ -113,7 +123,10 @@ EventEmitter.prototype.emit = function ( key ) {
     if (event && key.match(event.regex)) {
       if ('function' === typeof event.cb) {
         event.cb.apply({ event: key }, args);
-        if (event.once) { delete _self._events[i]; }
+        if (event.once) {
+          _self.emit( 'removeListener', _self._events[i].regex, _self._events[i].cb );
+          delete _self._events[i];
+        }
       }
     }
   }

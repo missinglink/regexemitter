@@ -4,6 +4,8 @@ EventEmitter = require '../index'
 should = require 'should'
 events = require 'events'
 
+func = (arg) -> return arg
+
 describe 'EventEmitter', ->
 
   it 'should be a function', -> EventEmitter.should.be.instanceof Function
@@ -40,43 +42,43 @@ describe 'EventEmitter', ->
 
     # ---------------------------------------------------------------------------------------
 
-    it 'should have a static method - listeners()', ->
+    it 'should have a static method - listenerCount()', ->
 
-      EventEmitter.should.have.property('listeners').and.be.instanceof Function
+      EventEmitter.should.have.property('listenerCount').and.be.instanceof Function
 
-    describe 'EventEmitter.listeners( emitter, listener )', ->
+    describe 'EventEmitter.listenerCount( emitter, event )', ->
 
       it 'should accept 2 arguments', ->
 
-        EventEmitter.listeners.length.should.eql 2
+        EventEmitter.listenerCount.length.should.eql 2
 
       it 'should return -1 unless valid emitter is supplied', ->
 
-        EventEmitter.listeners().should.eql -1
+        EventEmitter.listenerCount().should.eql -1
 
       it 'should return 0 for new emitters', ->
 
-        EventEmitter.listeners( new EventEmitter() ).should.eql 0
+        EventEmitter.listenerCount( new EventEmitter() ).should.eql 0
 
       it 'should return the length of _events for a given emitter', ->
 
         emitter = new EventEmitter()
-        emitter.on( 'test', -> null )
+        emitter.on( 'test', func )
 
         emitter._events.length = 1
-        EventEmitter.listeners( emitter ).should.eql 1
+        EventEmitter.listenerCount( emitter ).should.eql 1
 
-      it 'should return the length of matching events when listener is supplied', ->
+      it 'should return the length of matching events when event name is supplied', ->
 
         emitter = new EventEmitter()
-        emitter.on( 'test1', -> null )
-        emitter.on( 'test1', -> null )
-        emitter.on( 'test2', -> null )
+        emitter.on( 'test1', func )
+        emitter.on( 'test1', func )
+        emitter.on( 'test2', func )
 
-        EventEmitter.listeners( emitter ).should.eql 3
-        EventEmitter.listeners( emitter, 'test1' ).should.eql 2
-        EventEmitter.listeners( emitter, 'test2' ).should.eql 1
-        EventEmitter.listeners( emitter, 'test3' ).should.eql 0
+        EventEmitter.listenerCount( emitter ).should.eql 3
+        EventEmitter.listenerCount( emitter, 'test1' ).should.eql 2
+        EventEmitter.listenerCount( emitter, 'test2' ).should.eql 1
+        EventEmitter.listenerCount( emitter, 'test3' ).should.eql 0
 
     # ---------------------------------------------------------------------------------------
 
@@ -96,16 +98,16 @@ describe 'EventEmitter', ->
         emitter = new EventEmitter()
 
         [ 'test', /test/, new RegExp( 'test' ) ].forEach ( eventName ) ->
-          (-> emitter.on( eventName, -> null ) ).should.not.throw()
+          (-> emitter.on( eventName, func ) ).should.not.throw()
 
-        [ null, undefined, 0, 1, 1.1, [], {}, -> null ].forEach ( eventName ) ->
-          (-> emitter.on( eventName, -> null ) ).should.throw 'on only takes regex or string event names'
+        [ null, undefined, 0, 1, 1.1, [], {}, func ].forEach ( eventName ) ->
+          (-> emitter.on( eventName, func ) ).should.throw 'on only takes regex or string event names'
 
       it 'should require a valid listener', ->
 
         emitter = new EventEmitter()
 
-        (-> emitter.on( 'test', -> null ) ).should.not.throw()
+        (-> emitter.on( 'test', func ) ).should.not.throw()
         emitter._events[0].should.have.property('regex').and.eql 'test'
         emitter._events[0].should.have.property('cb').and.be.instanceof Function
 
@@ -115,7 +117,7 @@ describe 'EventEmitter', ->
       it 'should register a new listener for an event', ->
 
         emitter = new EventEmitter()
-        emitter.on( 'test', -> null )
+        emitter.on( 'test', func )
         emitter._events[0].should.have.property('regex').and.eql 'test'
         emitter._events[0].should.have.property('cb')
         emitter._events.length.should.eql 1
@@ -123,7 +125,7 @@ describe 'EventEmitter', ->
       it 'should not set the once flag for an event', ->
 
         emitter = new EventEmitter()
-        emitter.on( 'test', -> null )
+        emitter.on( 'test', func )
         emitter._events[0].should.not.have.property 'once'
 
       it 'should call listeners more than once', (done) ->
@@ -154,8 +156,21 @@ describe 'EventEmitter', ->
           done()
 
         emitter.setMaxListeners 2 # 'error' counts for 1 listener
-        emitter.on 'test1', -> null
-        emitter.on /test2/, -> null
+        emitter.on 'test1', func
+        emitter.on /test2/, func
+
+      it 'should emit newListener event', (done) ->
+
+        callCount = 0
+        emitter = new EventEmitter()
+        emitter.on 'newListener', (name, listener) ->
+          if ++callCount > 1 # 'newListener' counts for 1 listener
+            name.should.eql 'test'
+            listener.should.eql func
+            if callCount is 3 then done()
+
+        emitter.on( 'test', func )
+        emitter.on( 'test', func )
 
     # ---------------------------------------------------------------------------------------
 
@@ -175,16 +190,16 @@ describe 'EventEmitter', ->
         emitter = new EventEmitter()
 
         [ 'test', /test/, new RegExp( 'test' ) ].forEach ( eventName ) ->
-          (-> emitter.once( eventName, -> null ) ).should.not.throw()
+          (-> emitter.once( eventName, func ) ).should.not.throw()
 
-        [ null, undefined, 0, 1, 1.1, [], {}, -> null ].forEach ( eventName ) ->
-          (-> emitter.once( eventName, -> null ) ).should.throw 'once only takes regex or string event names'
+        [ null, undefined, 0, 1, 1.1, [], {}, func ].forEach ( eventName ) ->
+          (-> emitter.once( eventName, func ) ).should.throw 'once only takes regex or string event names'
 
       it 'should require a valid listener', ->
 
         emitter = new EventEmitter()
 
-        (-> emitter.once( 'test', -> null ) ).should.not.throw()
+        (-> emitter.once( 'test', func ) ).should.not.throw()
         emitter._events[0].should.have.property('regex').and.eql 'test'
         emitter._events[0].should.have.property('cb').and.be.instanceof Function
 
@@ -194,7 +209,7 @@ describe 'EventEmitter', ->
       it 'should register a new listener for an event', ->
 
         emitter = new EventEmitter()
-        emitter.once( 'test', -> null )
+        emitter.once( 'test', func )
         emitter._events[0].should.have.property('regex').and.eql 'test'
         emitter._events[0].should.have.property('cb')
         emitter._events.length.should.eql 1
@@ -202,14 +217,14 @@ describe 'EventEmitter', ->
       it 'should set the once flag for an event', ->
 
         emitter = new EventEmitter()
-        emitter.once( 'test', -> null )
+        emitter.once( 'test', func )
         emitter._events[0].should.have.property 'once'
 
       it 'should only call listeners once', (done) ->
 
         # mocha will warn if done is called more than once
         emitter = new EventEmitter()
-        emitter.once /hello (adam|ben)/, done
+        emitter.once( /hello (adam|ben)/, done )
 
         emitter.emit( 'hello adam' )
         emitter.emit( 'hello ben' )
@@ -233,8 +248,34 @@ describe 'EventEmitter', ->
           done()
 
         emitter.setMaxListeners 2 # 'error' counts for 1 listener
-        emitter.once 'test1', -> null
-        emitter.once /test2/, -> null
+        emitter.once( 'test1', func )
+        emitter.once( /test2/, func )
+
+      it 'should emit newListener event', (done) ->
+
+        callCount = 0
+        emitter = new EventEmitter()
+        emitter.on 'newListener', (name, listener) ->
+          if ++callCount > 1 # 'newListener' counts for 1 listener
+            name.should.eql 'test'
+            listener.should.eql func
+            if callCount is 3 then done()
+
+        emitter.once( 'test', func )
+        emitter.once( 'test', func )
+
+      it 'should emit removeListener event', (done) ->
+
+        callCount = 0
+        emitter = new EventEmitter()
+        emitter.on 'removeListener', (name, listener) ->
+          name.should.eql 'test'
+          listener.should.eql func
+          if ++callCount is 2 then done()
+
+        emitter.once( 'test', func )
+        emitter.once( 'test', func )
+        emitter.emit( 'test' )
 
     # ---------------------------------------------------------------------------------------
 
@@ -268,21 +309,21 @@ describe 'EventEmitter', ->
         emitter.on( 'error', (err) -> errors.push(err) )
 
         valid = [ 'test', /test/, new RegExp( 'test' ) ]
-        invalid = [ null, undefined, 0, 1, 1.1, [], {}, -> null ]
+        invalid = [ null, undefined, 0, 1, 1.1, [], {}, func ]
         
-        valid.forEach ( eventName ) -> emitter.removeListener( eventName, -> null )
+        valid.forEach ( eventName ) -> emitter.removeListener( eventName, func )
         errors.should.eql []
 
-        invalid.forEach ( eventName ) -> emitter.removeListener( eventName, -> null )
+        invalid.forEach ( eventName ) -> emitter.removeListener( eventName, func )
         errors.length.should.eql invalid.length
         errors[0].should.eql 'invalid event name'
 
       it 'should remove all listeners matching event', ->
 
         emitter = new EventEmitter()
-        emitter.on( 'test1', -> null )
-        emitter.on( 'test1', -> null )
-        emitter.on( 'test2', -> null )
+        emitter.on( 'test1', func )
+        emitter.on( 'test1', func )
+        emitter.on( 'test2', func )
 
         emitter.removeListener( 'test3' )
         emitter._events.length.should.eql 3
@@ -290,6 +331,19 @@ describe 'EventEmitter', ->
         emitter._events.length.should.eql 1
         emitter.removeListener( 'test2' )
         emitter._events.length.should.eql 0
+
+      it 'should emit removeListener event', (done) ->
+
+        callCount = 0
+        emitter = new EventEmitter()
+        emitter.on 'removeListener', (name, listener) ->
+          name.should.eql 'test'
+          listener.should.eql func
+          if ++callCount is 2 then done()
+
+        emitter.on( 'test', func )
+        emitter.on( 'test', func )
+        emitter.removeListener( 'test' )
 
     # ---------------------------------------------------------------------------------------
 
@@ -307,8 +361,8 @@ describe 'EventEmitter', ->
       it 'should remove all events when event name not supplied as first argument', ->
 
         emitter = new EventEmitter()
-        emitter.on( 'test1', -> null )
-        emitter.on( 'test2', -> null )
+        emitter.on( 'test1', func )
+        emitter.on( 'test2', func )
         emitter._events.length.should.eql 2
 
         emitter.removeAllListeners()
@@ -321,14 +375,28 @@ describe 'EventEmitter', ->
         emitter.on( 'error', (err) -> errors.push(err) )
 
         valid = [ 'test', /test/, new RegExp( 'test' ) ]
-        invalid = [ null, undefined, 0, 1, 1.1, [], {}, -> null ]
+        invalid = [ null, undefined, 0, 1, 1.1, [], {}, func ]
 
-        valid.forEach ( eventName ) -> emitter.removeAllListeners( eventName, -> null )
+        valid.forEach ( eventName ) -> emitter.removeAllListeners( eventName, func )
         errors.should.eql []
 
-        invalid.forEach ( eventName ) -> emitter.removeAllListeners( eventName, -> null )
+        invalid.forEach ( eventName ) -> emitter.removeAllListeners( eventName, func )
         errors.length.should.eql invalid.length
         errors[0].should.eql 'invalid event name'
+
+      it 'should emit removeListener event', (done) ->
+
+        callCount = 0
+        emitter = new EventEmitter()
+        emitter.on 'removeListener', (name, listener) ->
+          if ++callCount > 1 # 'removeListener' counts for 1 listener
+            name.should.eql 'test'
+            listener.should.eql func
+            if callCount is 3 then done()
+
+        emitter.on( 'test', func )
+        emitter.on( 'test', func )
+        emitter.removeAllListeners()
 
     # ---------------------------------------------------------------------------------------
 
@@ -350,7 +418,7 @@ describe 'EventEmitter', ->
         emitter.on( 'error', (err) -> errors.push(err) )
 
         valid = [ 0, 1, 1.1 ]
-        invalid = [ null, undefined, 'test', /test/, new RegExp( 'test' ), [], {}, -> null ]
+        invalid = [ null, undefined, 'test', /test/, new RegExp( 'test' ), [], {}, func ]
 
         valid.forEach ( max ) -> emitter.setMaxListeners( max )
         errors.should.eql []
@@ -386,15 +454,15 @@ describe 'EventEmitter', ->
       it 'should return the contents of _events', ->
 
         emitter = new EventEmitter()
-        emitter.on( 'test', -> null )
+        emitter.on( 'test', func )
         emitter.listeners().should.eql emitter._events
 
       it 'should return only the events equal to supplied listener', ->
 
         emitter = new EventEmitter()
-        emitter.on( 'test1', -> null )
-        emitter.on( 'test1', -> null )
-        emitter.on( 'test2', -> null )
+        emitter.on( 'test1', func )
+        emitter.on( 'test1', func )
+        emitter.on( 'test2', func )
 
         emitter.listeners().should.eql emitter._events
         Object.keys( emitter.listeners( 'test1' ) ).length.should.eql 2
@@ -419,16 +487,16 @@ describe 'EventEmitter', ->
 
         emitter = new EventEmitter()
 
-        (-> emitter.match( 'test', -> null ) ).should.not.throw()
+        (-> emitter.match( 'test', func ) ).should.not.throw()
 
-        [ /test/, new RegExp( 'test' ), null, undefined, 0, 1, 1.1, [], {}, -> null ].forEach ( key ) ->
-          (-> emitter.match( key, -> null ) ).should.throw 'invalid string'
+        [ /test/, new RegExp( 'test' ), null, undefined, 0, 1, 1.1, [], {}, func ].forEach ( key ) ->
+          (-> emitter.match( key, func ) ).should.throw 'invalid string'
 
       it 'should return boolean true/false if an event name matches supplied string', ->
 
         emitter = new EventEmitter()
-        emitter.on( /bingo|bango/, -> null )
-        emitter.once( 'foo', -> null )
+        emitter.on( /bingo|bango/, func )
+        emitter.once( 'foo', func )
         emitter.match( 'bingo' ).should.eql true
         emitter.match( 'foo' ).should.eql true
         emitter.match( 'baz' ).should.eql false
@@ -447,7 +515,7 @@ describe 'EventEmitter', ->
 
         (-> emitter.emit( 'test', 'arg1' ) ).should.not.throw()
 
-        [ /test/, new RegExp( 'test' ), null, undefined, 0, 1, 1.1, [], {}, -> null ].forEach ( key ) ->
+        [ /test/, new RegExp( 'test' ), null, undefined, 0, 1, 1.1, [], {}, func ].forEach ( key ) ->
           (-> emitter.emit( key ) ).should.throw 'invalid string'
 
       it 'should not require arguments', ->
@@ -508,16 +576,16 @@ describe 'EventEmitter', ->
 
         emitter = new EventEmitter()
         emitter.should.have.property('_events').and.eql null
-        emitter.on( 'test', -> null )
-        emitter.should.have.property('_events').and.eql { test: -> null }
+        emitter.on( 'test', func )
+        emitter.should.have.property('_events').and.eql { test: func }
 
        it.skip 'should set _events key to array on second insert', ->
 
         emitter = new EventEmitter()
         emitter.should.have.property('_events').and.eql null
-        emitter.on( 'test', -> null )
-        emitter.on( 'test', -> null )
-        emitter.should.have.property('_events').and.eql { test: [ ( -> null ), ( -> null ) ] }
+        emitter.on( 'test', func )
+        emitter.on( 'test', func )
+        emitter.should.have.property('_events').and.eql { test: [ ( func ), ( func ) ] }
 
       it.skip 'should store once events in the same way (once wrapper)', ->
 

@@ -15,17 +15,17 @@ describe 'functional tests', ->
       arg.should.eql 'bingo'
       arg2.should.eql 'bongo'
 
-      EventEmitter.listeners( emitter ).should.eql 1
-      EventEmitter.listeners( emitter, /hello (world|universe)/ ).should.eql 1
-      EventEmitter.listeners( emitter, /bango/ ).should.eql 0
+      EventEmitter.listenerCount( emitter ).should.eql 1
+      EventEmitter.listenerCount( emitter, /hello (world|universe)/ ).should.eql 1
+      EventEmitter.listenerCount( emitter, /bango/ ).should.eql 0
 
       if called > 2 then throw new Error 'event called too many times'
       if called == 2
         setTimeout ->
           emitter.removeListener( /hello (world|universe)/ )
-          EventEmitter.listeners( emitter ).should.eql 0
-          EventEmitter.listeners( emitter, /hello (world|universe)/ ).should.eql 0
-          EventEmitter.listeners( emitter, /bango/ ).should.eql 0
+          EventEmitter.listenerCount( emitter ).should.eql 0
+          EventEmitter.listenerCount( emitter, /hello (world|universe)/ ).should.eql 0
+          EventEmitter.listenerCount( emitter, /bango/ ).should.eql 0
           done()
         , 10
 
@@ -45,17 +45,17 @@ describe 'functional tests', ->
       arg.should.eql 'bingo'
       arg2.should.eql 'bongo'
 
-      EventEmitter.listeners( emitter ).should.eql 1
-      EventEmitter.listeners( emitter, /hello (world|universe)/ ).should.eql 1
-      EventEmitter.listeners( emitter, /bango/ ).should.eql 0
+      EventEmitter.listenerCount( emitter ).should.eql 1
+      EventEmitter.listenerCount( emitter, /hello (world|universe)/ ).should.eql 1
+      EventEmitter.listenerCount( emitter, /bango/ ).should.eql 0
 
       if called > 1 then throw new Error 'event called too many times'
       if called == 1
         setTimeout ->
           emitter.removeListener( /hello (world|universe)/ )
-          EventEmitter.listeners( emitter ).should.eql 0
-          EventEmitter.listeners( emitter, /hello (world|universe)/ ).should.eql 0
-          EventEmitter.listeners( emitter, /bango/ ).should.eql 0
+          EventEmitter.listenerCount( emitter ).should.eql 0
+          EventEmitter.listenerCount( emitter, /hello (world|universe)/ ).should.eql 0
+          EventEmitter.listenerCount( emitter, /bango/ ).should.eql 0
           done()
         , 10
 
