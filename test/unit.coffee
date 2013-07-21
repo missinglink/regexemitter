@@ -545,10 +545,14 @@ describe 'EventEmitter', ->
 
     emitter = regex: new EventEmitter(), nodejs: new events.EventEmitter()
 
-    it.skip 'should have the same prototype methods', ->
+    it 'should have the same prototype methods', ->
 
       for method in Object.keys( events.EventEmitter.prototype )
         EventEmitter.prototype.should.have.property(method).and.be.instanceof Function
+
+    it.skip 'should expect the same amount of arguments for prototype methods', ->
+
+      for method in Object.keys( events.EventEmitter.prototype )
         EventEmitter.prototype[method].length.should.eql events.EventEmitter.prototype[method].length
 
     it.skip 'should have the same properties & default values', ->
