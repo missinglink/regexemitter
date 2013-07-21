@@ -1,94 +1,122 @@
+/*global module, window, define */
+'use strict';
 
-function EventEmitter(){
+function EventEmitter() {
+  this.domain = null;
   this._events = [];
-  this.maxListeners = 10;
+  this._maxListeners = 10;
 }
 
-EventEmitter.prototype.on = function( regex, cb ){
-  if( this._events.length >= this.maxListeners ) return this.emit( 'error', 'max event listeners' );
+EventEmitter.listeners = function (emitter, listener) {
+  if (!emitter || !Array.isArray( emitter._events )) { return -1; }
+  if (!listener) { return emitter._events.length; }
+  return emitter._events.filter(function (event) {
+    return (String(event.regex) === String(listener));
+  }).length;
+};
+
+EventEmitter.prototype.on = function (name, listener) {
+  if (this._events.length >= this._maxListeners) {
+    return this.emit('error', 'max event listeners');
+  }
+  if (!( name instanceof RegExp || 'string' === typeof name )) {
+    throw new Error( 'on only takes regex or string event names' );
+  }
+  if ( 'function' !== typeof listener ) {
+    throw new Error( 'on only takes instances of Function' );
+  }
   this._events.push({
-    regex: regex,
-    cb: cb
+    regex: name,
+    cb: listener
   });
 };
 
-EventEmitter.prototype.once = function( regex, cb ){
-  if( this._events.length >= this.maxListeners ) return this.emit( 'error', 'max event listeners' );
+EventEmitter.prototype.once = function (name, listener) {
+  if (this._events.length >= this._maxListeners) {
+    return this.emit('error', 'max event listeners');
+  }
+  if (!( name instanceof RegExp || 'string' === typeof name )) {
+    throw new Error( 'once only takes regex or string event names' );
+  }
+  if ( 'function' !== typeof listener ) {
+    throw new Error( 'once only takes instances of Function' );
+  }
   this._events.push({
-    regex: regex,
-    cb: cb,
+    regex: name,
+    cb: listener,
     once: true
   });
 };
 
-EventEmitter.prototype.removeListener = function( regex ){
-  this._events = this._events.filter( function( event ){
-    return( String( event.regex ) !== String( regex ) );
+EventEmitter.prototype.removeListener = function (regex) {
+  if (!( regex instanceof RegExp || 'string' === typeof regex )) {
+    return this.emit('error', 'invalid event name');
+  }
+  this._events = this._events.filter(function (event) {
+    return (String(event.regex) !== String(regex));
   });
 };
 
-EventEmitter.prototype.removeAllListeners = function( regex ){
-  this._events = this._events.filter( function( event ){
-    if( !regex ) return false;
-    if( String( event.regex ) === String( regex ) ) return false;
-    else return true;
+EventEmitter.prototype.removeAllListeners = function (regex) {
+  if (arguments.length && !( regex instanceof RegExp || 'string' === typeof regex )) {
+    return this.emit('error', 'invalid event name');
+  }
+  this._events = this._events.filter(function (event) {
+    if (!regex) { return false; }
+    if (String(event.regex) === String(regex)) { return false; }
+    return true;
   });
 };
 
-EventEmitter.prototype.setMaxListeners = function( n ){
-  this.maxListeners = n;
+EventEmitter.prototype.setMaxListeners = function (max) {
+  if ('number' !== typeof max) {
+    return this.emit('error', 'invalid max value');
+  }
+  this._maxListeners = max;
 };
 
-EventEmitter.prototype.listeners = function( regex ){
-  return this._events.filter( function( event ){
-    return( !regex || String( event.regex ) === String( regex ) );
+EventEmitter.prototype.listeners = function (name) {
+  return this._events.filter(function (event) {
+    return (!name || String(event.regex) === String(name));
   });
 };
 
-EventEmitter.prototype.match = function( string ){
-  if( 'string' !== typeof string ) throw new Error( 'invalid string' );
-  for( var i in this._events ){
-    if( string.match( this._events[i].regex ) ){
+EventEmitter.prototype.match = function (match) {
+  var i = 0, len;
+  if ('string' !== typeof match) { throw new Error('invalid string'); }
+  for (len = this._events.length; i < len; i++) {
+    if (match.match(this._events[i].regex)) {
       return true;
     }
   }
   return false;
 };
 
-EventEmitter.listeners = function( emitter, regex ){
-  if( !regex ) return emitter._events.length;
-  return emitter._events.filter( function( event ){
-    return( String( event.regex ) === String( regex ) );
-  }).length;
-};
-
-EventEmitter.prototype.emit = function(){
-  var args = Array.prototype.slice.call( arguments, 0 );
-  var key = args.shift();
-  var _self = this;
-  this._events.forEach( function( event, k ){
-    if( event && key.match( event.regex ) ){
-      if( 'function' === typeof event.cb ){
-        event.cb.apply( { event: key }, args );
-        if( event.once ) delete _self._events[ k ];
+EventEmitter.prototype.emit = function () {
+  var args = Array.prototype.slice.call(arguments, 0);
+  var key = args.shift(); // shift key off args
+  if ('string' !== typeof key) { throw new Error('invalid string'); }
+  var _self = this, i = 0, len;
+  for (len = this._events.length; i < len; i++) {
+    var event = _self._events[i];
+    if (event && key.match(event.regex)) {
+      if ('function' === typeof event.cb) {
+        event.cb.apply({ event: key }, args);
+        if (event.once) { delete _self._events[i]; }
       }
     }
-  });
+  }
 };
 
 // Export for nodejs
-if ( typeof module !== 'undefined' && typeof module.exports !== 'undefined ') {
+if (module !== undefined && module.exports !== undefined) {
   module.exports = EventEmitter;
-}
-else {
+} else {
   // Export for AMD
-  if ( typeof define === 'function' && define.amd ) {
-    define([], function() {
-      return EventEmitter;
-    });
-  }
+  if (typeof define === 'function' && define.amd) {
+    define([], function () { return EventEmitter; });
   // Export to browser
-  else {
+  } else {
     window.EventEmitter = EventEmitter;
   }
 }
