@@ -2,9 +2,19 @@
   "name": "regexemitter",
   "preferGlobal": false,
   "private": false,
-  "version": "0.2.2",
-  "description": "a regex eventemitter wirtten in javascript",
+  "version": "0.2.3",
+  "description": "An event emitter which takes regular expressions & strings for event names. Well tested and available in vanilla javascript for the browser or server.",
+  "author": "missinglink <insomnia@rcpt.at> http://twitter.com/insertcoffee",
   "contributors": [],
+  "keywords": [
+    "event",
+    "events",
+    "emitter",
+    "eventemitter",
+    "regex",
+    "regexemitter",
+    "regular expression"
+  ],
   "scripts": {
     "test": "node node_modules/mocha/bin/mocha --recursive --reporter spec --compilers coffee:coffee-script test"
   },
@@ -13,7 +23,7 @@
     "should": "*",
     "coffee-script": "*"
   },
-  "readme": "# a regex eventemitter wirtten in javascript",
+  "readme": "An event emitter which takes regular expressions & strings for event names. Well tested and available in vanilla javascript for the browser or server.",
   "engines": {
     "node": ">0.6.0",
     "npm": ">1.1.x"
