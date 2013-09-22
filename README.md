@@ -96,3 +96,6 @@ npm test
 ```
 
 [![Build Status](https://travis-ci.org/missinglink/regexemitter.png?branch=master)](https://travis-ci.org/missinglink/regexemitter)
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/missinglink/regexemitter/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
