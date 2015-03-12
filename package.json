@@ -5,6 +5,12 @@
   "version": "0.2.3",
   "description": "An event emitter which takes regular expressions & strings for event names. Well tested and available in vanilla javascript for the browser or server.",
   "author": "missinglink <insomnia@rcpt.at> http://twitter.com/insertcoffee",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://www.opensource.org/licenses/MIT"
+    }
+  ],
   "contributors": [],
   "keywords": [
     "event",
