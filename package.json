@@ -25,9 +25,9 @@
     "test": "node node_modules/mocha/bin/mocha --recursive --reporter spec --compilers coffee:coffee-script/register test"
   },
   "devDependencies": {
-    "coffee-script": "^1.9.1",
-    "mocha": "^2.2.1",
-    "should": "^5.2.0"
+    "coffee-script": "1.9.1",
+    "mocha": "2.2.1",
+    "should": "5.2.0"
   },
   "readme": "An event emitter which takes regular expressions & strings for event names. Well tested and available in vanilla javascript for the browser or server.",
   "engines": {
