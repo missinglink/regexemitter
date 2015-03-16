@@ -11,10 +11,10 @@ describe 'functional tests', ->
     events.on /send this message to (john|dave)/, ( arg1, arg2 ) ->
 
       [ 'send this message to john', 'send this message to dave' ]
-        .should.include this.event
+        .indexOf( this.event ).should.not.equal -1
 
       [ 'hello john', 'ahoy dave' ]
-        .should.include arg1 + ' ' + arg2
+        .indexOf( arg1 + ' ' + arg2 ).should.not.equal -1
 
       if ++called > 1 then done()
 
@@ -34,7 +34,7 @@ describe 'functional tests', ->
         EventEmitter.listenerCount( emitter ).should.eql 1 # listener still registered
         emitter.removeListener( /hello (world|universe)/ )
         EventEmitter.listenerCount( emitter ).should.eql 0 # listener removed successfully
-      
+
       # mocha will complain if done is called more than once
       done()
 

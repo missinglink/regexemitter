@@ -16,7 +16,7 @@
     "regular expression"
   ],
   "scripts": {
-    "test": "node node_modules/mocha/bin/mocha --recursive --reporter spec --compilers coffee:coffee-script test"
+    "test": "node node_modules/mocha/bin/mocha --recursive --reporter spec --compilers coffee:coffee-script/register test"
   },
   "devDependencies": {
     "mocha": "*",
@@ -31,5 +31,10 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/missinglink/regexemitter.git"
+  },
+  "dependencies": {
+    "coffee-script": "^1.9.1",
+    "mocha": "^2.2.1",
+    "should": "^5.2.0"
   }
 }
