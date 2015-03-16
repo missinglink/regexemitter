@@ -1,141 +1,168 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
+
   <head>
-    <meta charset="utf-8">
+    <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Regexemitter by missinglink</title>
+    <meta name="description" content="Regexemitter : a regex event emitter">
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="javascripts/scale.fix.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Regexemitter</title>
   </head>
+
   <body>
-    <div class="wrapper">
-      <header>
-        <h1 class="header">Regexemitter</h1>
-        <p class="header">a regex event emitter</p>
 
-        <ul>
-          <li class="download"><a class="buttons" href="https://github.com/missinglink/regexemitter/zipball/master">Download ZIP</a></li>
-          <li class="download"><a class="buttons" href="https://github.com/missinglink/regexemitter/tarball/master">Download TAR</a></li>
-          <li><a class="buttons github" href="https://github.com/missinglink/regexemitter">View On GitHub</a></li>
-        </ul>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/missinglink/regexemitter">View on GitHub</a>
 
-        <p class="header">This project is maintained by <a class="header name" href="https://github.com/missinglink">missinglink</a></p>
+          <h1 id="project_title">Regexemitter</h1>
+          <h2 id="project_tagline">a regex event emitter</h2>
 
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/missinglink/regexemitter/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/missinglink/regexemitter/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
 
-      </header>
-      <section>
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
         <h1>
-<a name="regex-event-emitter" class="anchor" href="#regex-event-emitter"><span class="octicon octicon-link"></span></a>Regex event emitter</h1>
+<a id="regex-event-emitter" class="anchor" href="#regex-event-emitter" aria-hidden="true"><span class="octicon octicon-link"></span></a>regex event emitter</h1>
 
 <p>An event emitter which takes regular expressions &amp; strings for event names.</p>
 
 <p>Well tested and available in vanilla javascript for the browser or server.</p>
 
 <h3>
-<a name="install" class="anchor" href="#install"><span class="octicon octicon-link"></span></a>Install</h3>
+<a id="install" class="anchor" href="#install" aria-hidden="true"><span class="octicon octicon-link"></span></a>install</h3>
 
-<div class="highlight"><pre>npm install regexemitter --save
-</pre></div>
+<div class="highlight highlight-bash"><pre>npm install regexemitter --save</pre></div>
 
 <p><a href="https://nodei.co/npm/regexemitter/"><img src="https://nodei.co/npm/regexemitter.png?downloads=true&amp;stars=true" alt="NPM"></a></p>
 
 <h3>
-<a name="example" class="anchor" href="#example"><span class="octicon octicon-link"></span></a>Example</h3>
+<a id="example" class="anchor" href="#example" aria-hidden="true"><span class="octicon octicon-link"></span></a>example</h3>
 
-<div class="highlight"><pre><span class="cm">/**</span>
-<span class="cm">  regexeventemitter behaves just like nodejs native emitter except it</span>
-<span class="cm">  allows regular expressions as event names.</span>
-<span class="cm">**/</span>
+<div class="highlight highlight-javascript"><pre><span class="pl-c">/**</span>
+<span class="pl-c">  regexeventemitter behaves just like nodejs native emitter except it</span>
+<span class="pl-c">  allows regular expressions as event names.</span>
+<span class="pl-c">**/</span>
 
-<span class="kd">var</span> <span class="nx">EventEmitter</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'regexemitter'</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">events</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">EventEmitter</span><span class="p">();</span>
+<span class="pl-s">var</span> EventEmitter <span class="pl-k">=</span> <span class="pl-s3">require</span>(<span class="pl-s1"><span class="pl-pds">'</span>regexemitter<span class="pl-pds">'</span></span>);
+<span class="pl-s">var</span> events <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">EventEmitter</span>();
 
-<span class="c1">// register a new event</span>
-<span class="nx">events</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span> <span class="sr">/send this message to (john|dave)/</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">arg1</span><span class="p">,</span> <span class="nx">arg2</span> <span class="p">){</span>
+<span class="pl-c">// register a new event</span>
+events.on(<span class="pl-sr"> <span class="pl-pds">/</span>send this message to (john<span class="pl-k">|</span>dave)<span class="pl-pds">/</span></span>, <span class="pl-st">function</span> ( <span class="pl-vpf">arg1</span>, <span class="pl-vpf">arg2</span> ){
 
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s1">'event:'</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">event</span> <span class="p">);</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s1">'message:'</span><span class="p">,</span> <span class="nx">arg1</span><span class="p">,</span> <span class="nx">arg2</span> <span class="p">);</span>
+  <span class="pl-en">console</span><span class="pl-s3">.log</span>( <span class="pl-s1"><span class="pl-pds">'</span>event:<span class="pl-pds">'</span></span>, <span class="pl-v">this</span>.<span class="pl-s3">event</span> );
+  <span class="pl-en">console</span><span class="pl-s3">.log</span>( <span class="pl-s1"><span class="pl-pds">'</span>message:<span class="pl-pds">'</span></span>, arg1, arg2 );
 
-<span class="p">});</span>
+});
 
-<span class="nx">events</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span> <span class="s1">'send this message to john'</span><span class="p">,</span> <span class="s1">'hello'</span><span class="p">,</span> <span class="s1">'john'</span> <span class="p">);</span>
-<span class="nx">events</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span> <span class="s1">'send this message to andy'</span><span class="p">,</span> <span class="s1">'hi'</span><span class="p">,</span> <span class="s1">'andy'</span> <span class="p">);</span>
-<span class="nx">events</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span> <span class="s1">'send this message to dave'</span><span class="p">,</span> <span class="s1">'ahoy'</span><span class="p">,</span> <span class="s1">'dave'</span> <span class="p">);</span>
-</pre></div>
+events.emit( <span class="pl-s1"><span class="pl-pds">'</span>send this message to john<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>hello<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>john<span class="pl-pds">'</span></span> );
+events.emit( <span class="pl-s1"><span class="pl-pds">'</span>send this message to andy<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>hi<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>andy<span class="pl-pds">'</span></span> );
+events.emit( <span class="pl-s1"><span class="pl-pds">'</span>send this message to dave<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>ahoy<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>dave<span class="pl-pds">'</span></span> );</pre></div>
 
 <h3>
-<a name="output" class="anchor" href="#output"><span class="octicon octicon-link"></span></a>Output</h3>
+<a id="output" class="anchor" href="#output" aria-hidden="true"><span class="octicon octicon-link"></span></a>output</h3>
 
-<div class="highlight"><pre>event: send this message to john
+<div class="highlight highlight-bash"><pre>event: send this message to john
 message: hello john
 
 event: send this message to dave
-message: ahoy dave
-</pre></div>
+message: ahoy dave</pre></div>
 
 <h2>
-<a name="for-the-browser" class="anchor" href="#for-the-browser"><span class="octicon octicon-link"></span></a>For the browser</h2>
+<a id="for-the-browser" class="anchor" href="#for-the-browser" aria-hidden="true"><span class="octicon octicon-link"></span></a>for the browser</h2>
 
 <p>Copy <code>index.js</code> to your web server and rename it <code>regexemitter.js</code>.</p>
 
 <h3>
-<a name="example-1" class="anchor" href="#example-1"><span class="octicon octicon-link"></span></a>Example</h3>
+<a id="example-1" class="anchor" href="#example-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>example</h3>
 
-<div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"regexemitter.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
-<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span>
-
-  <span class="cm">/**</span>
-<span class="cm">    regexeventemitter behaves just like nodejs native emitter except it</span>
-<span class="cm">    allows regular expressions as event names.</span>
-<span class="cm">  **/</span>
-
-  <span class="kd">var</span> <span class="nx">events</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">EventEmitter</span><span class="p">();</span>
-
-  <span class="c1">// register a new event</span>
-  <span class="nx">events</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span> <span class="sr">/send this message to (john|dave)/</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">arg1</span><span class="p">,</span> <span class="nx">arg2</span> <span class="p">){</span>
-
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s1">'event:'</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">event</span> <span class="p">);</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s1">'message:'</span><span class="p">,</span> <span class="nx">arg1</span><span class="p">,</span> <span class="nx">arg2</span> <span class="p">);</span>
-
-  <span class="p">});</span>
-
-  <span class="nx">events</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span> <span class="s1">'send this message to john'</span><span class="p">,</span> <span class="s1">'hello'</span><span class="p">,</span> <span class="s1">'john'</span> <span class="p">);</span>
-  <span class="nx">events</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span> <span class="s1">'send this message to andy'</span><span class="p">,</span> <span class="s1">'hi'</span><span class="p">,</span> <span class="s1">'andy'</span> <span class="p">);</span>
-  <span class="nx">events</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span> <span class="s1">'send this message to dave'</span><span class="p">,</span> <span class="s1">'ahoy'</span><span class="p">,</span> <span class="s1">'dave'</span> <span class="p">);</span>
-
-<span class="nt">&lt;/script&gt;</span>
-</pre></div>
+<div class="highlight highlight-html"><pre>&lt;<span class="pl-ent">script</span> <span class="pl-e">type</span>=<span class="pl-s1"><span class="pl-pds">"</span>text/javascript<span class="pl-pds">"</span></span> <span class="pl-e">src</span>=<span class="pl-s1"><span class="pl-pds">"</span>regexemitter.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;
+<span class="pl-s2">&lt;<span class="pl-ent">script</span> <span class="pl-e">type</span>=<span class="pl-s1"><span class="pl-pds">"</span>text/javascript<span class="pl-pds">"</span></span>&gt;</span>
+<span class="pl-s2"></span>
+<span class="pl-s2">  <span class="pl-c">/**</span></span>
+<span class="pl-s2"><span class="pl-c">    regexeventemitter behaves just like nodejs native emitter except it</span></span>
+<span class="pl-s2"><span class="pl-c">    allows regular expressions as event names.</span></span>
+<span class="pl-s2"><span class="pl-c">  **/</span></span>
+<span class="pl-s2"></span>
+<span class="pl-s2">  <span class="pl-s">var</span> events <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">EventEmitter</span>();</span>
+<span class="pl-s2"></span>
+<span class="pl-s2">  <span class="pl-c">// register a new event</span></span>
+<span class="pl-s2">  events.on(<span class="pl-sr"> <span class="pl-pds">/</span>send this message to (john<span class="pl-k">|</span>dave)<span class="pl-pds">/</span></span>, <span class="pl-st">function</span> ( <span class="pl-vpf">arg1</span>, <span class="pl-vpf">arg2</span> ){</span>
+<span class="pl-s2"></span>
+<span class="pl-s2">    <span class="pl-en">console</span><span class="pl-s3">.log</span>( <span class="pl-s1"><span class="pl-pds">'</span>event:<span class="pl-pds">'</span></span>, <span class="pl-v">this</span>.<span class="pl-s3">event</span> );</span>
+<span class="pl-s2">    <span class="pl-en">console</span><span class="pl-s3">.log</span>( <span class="pl-s1"><span class="pl-pds">'</span>message:<span class="pl-pds">'</span></span>, arg1, arg2 );</span>
+<span class="pl-s2"></span>
+<span class="pl-s2">  });</span>
+<span class="pl-s2"></span>
+<span class="pl-s2">  events.emit( <span class="pl-s1"><span class="pl-pds">'</span>send this message to john<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>hello<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>john<span class="pl-pds">'</span></span> );</span>
+<span class="pl-s2">  events.emit( <span class="pl-s1"><span class="pl-pds">'</span>send this message to andy<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>hi<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>andy<span class="pl-pds">'</span></span> );</span>
+<span class="pl-s2">  events.emit( <span class="pl-s1"><span class="pl-pds">'</span>send this message to dave<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>ahoy<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>dave<span class="pl-pds">'</span></span> );</span>
+<span class="pl-s2"></span>
+<span class="pl-s2">&lt;/<span class="pl-ent">script</span>&gt;</span></pre></div>
 
 <h3>
-<a name="output-1" class="anchor" href="#output-1"><span class="octicon octicon-link"></span></a>Output</h3>
+<a id="output-1" class="anchor" href="#output-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>output</h3>
 
-<div class="highlight"><pre>event: send this message to john
+<div class="highlight highlight-bash"><pre>event: send this message to john
 message: hello john
 
 event: send this message to dave
-message: ahoy dave
-</pre></div>
+message: ahoy dave</pre></div>
 
 <h2>
-<a name="build-status" class="anchor" href="#build-status"><span class="octicon octicon-link"></span></a>Build Status</h2>
+<a id="build-status" class="anchor" href="#build-status" aria-hidden="true"><span class="octicon octicon-link"></span></a>build status</h2>
 
-<div class="highlight"><pre>npm <span class="nb">test</span>
-</pre></div>
+<div class="highlight highlight-bash"><pre>npm <span class="pl-s3">test</span></pre></div>
 
 <p><a href="https://travis-ci.org/missinglink/regexemitter"><img src="https://travis-ci.org/missinglink/regexemitter.png?branch=master" alt="Build Status"></a></p>
+
+<p><a href="https://bitdeli.com/free" title="Bitdeli Badge"><img src="https://d2weczhvl823v0.cloudfront.net/missinglink/regexemitter/trend.png" alt="Bitdeli Badge"></a></p>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>license</h2>
+
+<p>The MIT License (MIT)</p>
+
+<p>Copyright (c) Peter Johnson <a href="mailto:@insertcoffee">@insertcoffee</a></p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.</p>
       </section>
-      <footer>
-        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Regexemitter maintained by <a href="https://github.com/missinglink">missinglink</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
       </footer>
     </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-		          <script type="text/javascript">
+
+              <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
           </script>
@@ -145,6 +172,7 @@ message: ahoy dave
             pageTracker._trackPageview();
             } catch(err) {}
           </script>
+
 
   </body>
 </html>
